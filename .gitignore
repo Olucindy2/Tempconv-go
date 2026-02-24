@@ -1,0 +1,10 @@
+.idea/
+.vscode/
+bin/
+dist/
+build/
+*.exe
+*.test
+*.out
+coverage.out
+

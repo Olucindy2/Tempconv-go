@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package tempconv;
+
+option go_package = "tempconv/gen/tempconvpb;tempconvpb";
+
+service TempConverter {
+  rpc ConvertTemperature (ConvertRequest) returns (ConvertResponse);
+}
+
+message ConvertRequest {
+  double value = 1;
+  TemperatureUnit from_unit = 2;
+  TemperatureUnit to_unit = 3;
+}
+
+message ConvertResponse {
+  double converted_value = 1;
+  string formula_used = 2;
+}
+
+enum TemperatureUnit {
+  TEMPERATURE_UNIT_UNSPECIFIED = 0;
+  CELSIUS = 1;
+  FAHRENHEIT = 2;
+  KELVIN = 3;
+}

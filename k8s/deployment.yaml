@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tempconv-grpc
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: tempconv-grpc
+  template:
+    metadata:
+      labels:
+        app: tempconv-grpc
+    spec:
+      containers:
+        - name: tempconv-grpc
+          image: REGION-docker.pkg.dev/PROJECT_ID/tempconv-repo/tempconv:latest
+          ports:
+            - containerPort: 50051
+          env:
+            - name: PORT
+              value: "50051"
