@@ -185,14 +185,6 @@
 
       <section class="grid">
         <div>
-          <label for="endpoint">REST endpoint</label>
-          <input
-            id="endpoint"
-            type="text"
-            value="https://tempconvert-7063788400.europe-west1.run.app"
-          />
-        </div>
-        <div>
           <label for="value">Temperature value</label>
           <input id="value" type="number" value="100" step="0.01" />
         </div>
@@ -216,14 +208,12 @@
 
       <div class="action">
         <button id="convertBtn">Convert</button>
-        <div class="note">Endpoint must include https:// and will call /v1/convert</div>
       </div>
 
       <div class="result" id="result">Ready to convert.</div>
     </main>
 
     <script>
-      const endpointInput = document.getElementById("endpoint");
       const valueInput = document.getElementById("value");
       const fromUnitInput = document.getElementById("fromUnit");
       const toUnitInput = document.getElementById("toUnit");
@@ -236,7 +226,7 @@
       };
 
       const convert = async () => {
-        const endpoint = endpointInput.value.trim().replace(/\/$/, "");
+        const endpoint = window.location.origin;
         const payload = {
           value: Number(valueInput.value || 0),
           fromUnit: fromUnitInput.value,
@@ -258,7 +248,7 @@
           }
 
           const data = await response.json();
-          setResult(`Converted value: ${data.convertedValue} | ${data.formulaUsed}`);
+          setResult(`Converted value: ${data.convertedValue}`);
         } catch (error) {
           setResult(`Error: ${error.message}`, true);
         }
