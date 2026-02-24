@@ -11,5 +11,5 @@ spec:
     - name: grpc
       protocol: TCP
       port: 80
-      targetPort: 50051
+      targetPort: 8080
   type: LoadBalancer

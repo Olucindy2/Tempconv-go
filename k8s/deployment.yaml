@@ -16,7 +16,7 @@ spec:
         - name: tempconv-grpc
           image: us-central1-docker.pkg.dev/poised-space-485913-h8/tempconv-repo/tempconv:latest
           ports:
-            - containerPort: 50051
+            - containerPort: 8080
           env:
             - name: PORT
-              value: "50051"
+              value: "8080"
