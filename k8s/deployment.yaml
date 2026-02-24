@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: tempconv-grpc
-          image: REGION-docker.pkg.dev/PROJECT_ID/tempconv-repo/tempconv:latest
+          image: us-central1-docker.pkg.dev/poised-space-485913-h8/tempconv-repo/tempconv:latest
           ports:
             - containerPort: 50051
           env:
