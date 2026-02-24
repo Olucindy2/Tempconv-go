@@ -4,8 +4,15 @@ package tempconv;
 
 option go_package = "tempconv/gen/tempconvpb;tempconvpb";
 
+import "google/api/annotations.proto";
+
 service TempConverter {
-  rpc ConvertTemperature (ConvertRequest) returns (ConvertResponse);
+  rpc ConvertTemperature (ConvertRequest) returns (ConvertResponse) {
+    option (google.api.http) = {
+      post: "/v1/convert"
+      body: "*"
+    };
+  }
 }
 
 message ConvertRequest {

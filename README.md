@@ -131,6 +131,23 @@ Expected response:
 ```json
 {
   "convertedValue": 212,
+  "formulaUsed": "F = (C * 9/5) + 32"
+}
+```
+
+### REST (browser-friendly)
+
+If you deploy to Cloud Run or want to test in a browser, use the REST gateway:
+
+```powershell
+Invoke-RestMethod -Method Post -ContentType "application/json" -Body '{"value":100,"fromUnit":"CELSIUS","toUnit":"FAHRENHEIT"}' https://<HOST>/v1/convert
+```
+
+Example response:
+
+```json
+{
+  "convertedValue": 212,
   "formulaUsed": "F = (C × 9/5) + 32"
 }
 ```

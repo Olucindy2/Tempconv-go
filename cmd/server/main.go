@@ -5,10 +5,13 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"net/http"
 	"os"
 
+	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/reflection"
 	"google.golang.org/grpc/status"
 
@@ -40,7 +43,7 @@ func convert(value float64, fromUnit tempconvpb.TemperatureUnit, toUnit tempconv
 	case tempconvpb.TemperatureUnit_CELSIUS:
 		return celsiusValue, "C = source converted to celsius", nil
 	case tempconvpb.TemperatureUnit_FAHRENHEIT:
-		return (celsiusValue*9/5 + 32), "F = (C × 9/5) + 32", nil
+		return (celsiusValue*9/5 + 32), "F = (C * 9/5) + 32", nil
 	case tempconvpb.TemperatureUnit_KELVIN:
 		return (celsiusValue + 273.15), "K = C + 273.15", nil
 	default:
@@ -61,12 +64,17 @@ func (s *server) ConvertTemperature(_ context.Context, request *tempconvpb.Conve
 }
 
 func main() {
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "50051"
+	httpPort := os.Getenv("PORT")
+	if httpPort == "" {
+		httpPort = "8080"
 	}
 
-	listener, err := net.Listen("tcp", ":"+port)
+	grpcPort := os.Getenv("GRPC_PORT")
+	if grpcPort == "" {
+		grpcPort = "50051"
+	}
+
+	listener, err := net.Listen("tcp", ":"+grpcPort)
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
@@ -75,8 +83,22 @@ func main() {
 	tempconvpb.RegisterTempConverterServer(grpcServer, &server{})
 	reflection.Register(grpcServer)
 
-	log.Printf("TempConverter gRPC server running on port %s", port)
-	if err := grpcServer.Serve(listener); err != nil {
-		log.Fatalf("failed to serve: %v", err)
+	go func() {
+		log.Printf("TempConverter gRPC server running on port %s", grpcPort)
+		if err := grpcServer.Serve(listener); err != nil {
+			log.Fatalf("failed to serve: %v", err)
+		}
+	}()
+
+	gatewayMux := runtime.NewServeMux()
+	ctx := context.Background()
+	dialOptions := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
+	if err := tempconvpb.RegisterTempConverterHandlerFromEndpoint(ctx, gatewayMux, "127.0.0.1:"+grpcPort, dialOptions); err != nil {
+		log.Fatalf("failed to register gateway: %v", err)
+	}
+
+	log.Printf("TempConverter REST gateway running on port %s", httpPort)
+	if err := http.ListenAndServe(":"+httpPort, gatewayMux); err != nil {
+		log.Fatalf("failed to serve gateway: %v", err)
 	}
 }

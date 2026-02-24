@@ -7,6 +7,7 @@
 package tempconvpb
 
 import (
+	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -189,7 +190,7 @@ var File_tempconv_proto protoreflect.FileDescriptor
 
 const file_tempconv_proto_rawDesc = "" +
 	"\n" +
-	"\x0etempconv.proto\x12\btempconv\"\x92\x01\n" +
+	"\x0etempconv.proto\x12\btempconv\x1a\x1cgoogle/api/annotations.proto\"\x92\x01\n" +
 	"\x0eConvertRequest\x12\x14\n" +
 	"\x05value\x18\x01 \x01(\x01R\x05value\x126\n" +
 	"\tfrom_unit\x18\x02 \x01(\x0e2\x19.tempconv.TemperatureUnitR\bfromUnit\x122\n" +
@@ -203,9 +204,9 @@ const file_tempconv_proto_rawDesc = "" +
 	"\n" +
 	"FAHRENHEIT\x10\x02\x12\n" +
 	"\n" +
-	"\x06KELVIN\x10\x032Z\n" +
-	"\rTempConverter\x12I\n" +
-	"\x12ConvertTemperature\x12\x18.tempconv.ConvertRequest\x1a\x19.tempconv.ConvertResponseB$Z\"tempconv/gen/tempconvpb;tempconvpbb\x06proto3"
+	"\x06KELVIN\x10\x032r\n" +
+	"\rTempConverter\x12a\n" +
+	"\x12ConvertTemperature\x12\x18.tempconv.ConvertRequest\x1a\x19.tempconv.ConvertResponse\"\x16\x82\xd3\xe4\x93\x02\x10:\x01*\"\v/v1/convertB$Z\"tempconv/gen/tempconvpb;tempconvpbb\x06proto3"
 
 var (
 	file_tempconv_proto_rawDescOnce sync.Once
