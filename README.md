@@ -148,9 +148,25 @@ Example response:
 ```json
 {
   "convertedValue": 212,
-  "formulaUsed": "F = (C × 9/5) + 32"
+  "formulaUsed": "F = (C * 9/5) + 32"
 }
 ```
+
+### Browser demo page
+
+Open the demo UI and point it at your REST gateway endpoint:
+
+```powershell
+python -m http.server 5173 --directory web
+```
+
+Then visit:
+
+```text
+http://localhost:5173
+```
+
+Paste your Cloud Run URL (or GKE public URL if you expose REST there) into the page and click Convert.
 
 ## 6) What to submit to your professor
 

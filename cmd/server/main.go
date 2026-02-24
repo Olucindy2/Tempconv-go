@@ -63,6 +63,21 @@ func (s *server) ConvertTemperature(_ context.Context, request *tempconvpb.Conve
 	}, nil
 }
 
+func withCORS(handler http.Handler) http.Handler {
+	return http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
+		writer.Header().Set("Access-Control-Allow-Origin", "*")
+		writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
+		writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+
+		if request.Method == http.MethodOptions {
+			writer.WriteHeader(http.StatusNoContent)
+			return
+		}
+
+		handler.ServeHTTP(writer, request)
+	})
+}
+
 func main() {
 	httpPort := os.Getenv("PORT")
 	if httpPort == "" {
@@ -98,7 +113,7 @@ func main() {
 	}
 
 	log.Printf("TempConverter REST gateway running on port %s", httpPort)
-	if err := http.ListenAndServe(":"+httpPort, gatewayMux); err != nil {
+	if err := http.ListenAndServe(":"+httpPort, withCORS(gatewayMux)); err != nil {
 		log.Fatalf("failed to serve gateway: %v", err)
 	}
 }
