@@ -16,7 +16,27 @@ spec:
         - name: tempconv-grpc
           image: us-central1-docker.pkg.dev/poised-space-485913-h8/tempconv-repo/tempconv:latest
           ports:
-            - containerPort: 8080
+            - containerPort: 50051
           env:
             - name: PORT
-              value: "8080"
+              value: "50051"
+        - name: envoy
+          image: envoyproxy/envoy:v1.30.6
+          ports:
+            - containerPort: 8080
+            - containerPort: 9901
+          volumeMounts:
+            - name: envoy-config
+              mountPath: /etc/envoy
+              readOnly: true
+          args:
+            - "-c"
+            - "/etc/envoy/envoy.yaml"
+            - "--service-cluster"
+            - "tempconv"
+            - "--service-node"
+            - "tempconv-node"
+      volumes:
+        - name: envoy-config
+          configMap:
+            name: tempconv-envoy-config
