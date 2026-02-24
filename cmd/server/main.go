@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	_ "embed"
 	"fmt"
 	"log"
 	"net"
@@ -17,6 +18,9 @@ import (
 
 	"tempconv/gen/tempconvpb"
 )
+
+//go:embed static/index.html
+var homepageHTML []byte
 
 type server struct {
 	tempconvpb.UnimplementedTempConverterServer
@@ -78,6 +82,12 @@ func withCORS(handler http.Handler) http.Handler {
 	})
 }
 
+func serveHomepage(writer http.ResponseWriter, _ *http.Request) {
+	writer.Header().Set("Content-Type", "text/html; charset=utf-8")
+	writer.WriteHeader(http.StatusOK)
+	_, _ = writer.Write(homepageHTML)
+}
+
 func main() {
 	httpPort := os.Getenv("PORT")
 	if httpPort == "" {
@@ -112,8 +122,12 @@ func main() {
 		log.Fatalf("failed to register gateway: %v", err)
 	}
 
+	rootMux := http.NewServeMux()
+	rootMux.HandleFunc("/", serveHomepage)
+	rootMux.Handle("/v1/", withCORS(gatewayMux))
+
 	log.Printf("TempConverter REST gateway running on port %s", httpPort)
-	if err := http.ListenAndServe(":"+httpPort, withCORS(gatewayMux)); err != nil {
+	if err := http.ListenAndServe(":"+httpPort, rootMux); err != nil {
 		log.Fatalf("failed to serve gateway: %v", err)
 	}
 }

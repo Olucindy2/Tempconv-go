@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tempconv REST Gateway Demo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Fraunces:opsz,wght@9..144,600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --ink: #0f1c2e;
+        --muted: #4d5b70;
+        --cream: #f7f0e8;
+        --sun: #f7c773;
+        --ocean: #2a6fdb;
+        --leaf: #3aa775;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Space Grotesk", "Segoe UI", sans-serif;
+        color: var(--ink);
+        background: radial-gradient(circle at top, #fff6e3 0%, #f0f6ff 45%, #e9f7f0 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+      }
+
+      .shell {
+        width: min(960px, 100%);
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 28px;
+        padding: 32px;
+        box-shadow: 0 24px 80px rgba(15, 28, 46, 0.14);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .shell::before {
+        content: "";
+        position: absolute;
+        inset: -200px auto auto -200px;
+        width: 360px;
+        height: 360px;
+        background: conic-gradient(from 140deg, var(--sun), #ffd1a6, #ffe9c3);
+        border-radius: 50%;
+        opacity: 0.8;
+        filter: blur(0.5px);
+      }
+
+      .shell::after {
+        content: "";
+        position: absolute;
+        right: -120px;
+        bottom: -140px;
+        width: 280px;
+        height: 280px;
+        background: radial-gradient(circle, rgba(42, 111, 219, 0.4) 0%, rgba(42, 111, 219, 0) 70%);
+      }
+
+      header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        position: relative;
+        z-index: 1;
+      }
+
+      h1 {
+        font-family: "Fraunces", serif;
+        font-size: clamp(2rem, 3vw, 2.8rem);
+        margin: 0 0 8px;
+      }
+
+      .tag {
+        font-size: 0.9rem;
+        color: var(--muted);
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 18px;
+        margin-top: 28px;
+        position: relative;
+        z-index: 1;
+      }
+
+      label {
+        font-size: 0.9rem;
+        color: var(--muted);
+      }
+
+      input,
+      select {
+        width: 100%;
+        padding: 12px 14px;
+        border-radius: 12px;
+        border: 1px solid #d9dfe8;
+        font-size: 1rem;
+        margin-top: 8px;
+        background: #fff;
+      }
+
+      .action {
+        margin-top: 24px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        align-items: center;
+      }
+
+      button {
+        border: none;
+        background: linear-gradient(135deg, var(--ocean), #5b9bff);
+        color: #fff;
+        padding: 12px 20px;
+        border-radius: 999px;
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        box-shadow: 0 12px 24px rgba(42, 111, 219, 0.25);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      button:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 16px 30px rgba(42, 111, 219, 0.3);
+      }
+
+      .result {
+        margin-top: 18px;
+        padding: 16px;
+        border-radius: 16px;
+        background: #f4f7fb;
+        font-size: 1rem;
+        line-height: 1.5;
+      }
+
+      .note {
+        font-size: 0.85rem;
+        color: var(--muted);
+        margin-top: 10px;
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: #eaf5ef;
+        color: var(--leaf);
+        font-weight: 600;
+        font-size: 0.85rem;
+      }
+
+      @media (max-width: 640px) {
+        .shell {
+          padding: 24px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="shell">
+      <header>
+        <div>
+          <h1>Tempconv REST Demo</h1>
+          <div class="tag">Browser-ready gateway for your gRPC service</div>
+        </div>
+        <div class="badge">REST mode</div>
+      </header>
+
+      <section class="grid">
+        <div>
+          <label for="endpoint">REST endpoint</label>
+          <input
+            id="endpoint"
+            type="text"
+            value="https://tempconvert-7063788400.europe-west1.run.app"
+          />
+        </div>
+        <div>
+          <label for="value">Temperature value</label>
+          <input id="value" type="number" value="100" step="0.01" />
+        </div>
+        <div>
+          <label for="fromUnit">From unit</label>
+          <select id="fromUnit">
+            <option value="CELSIUS">Celsius</option>
+            <option value="FAHRENHEIT">Fahrenheit</option>
+            <option value="KELVIN">Kelvin</option>
+          </select>
+        </div>
+        <div>
+          <label for="toUnit">To unit</label>
+          <select id="toUnit">
+            <option value="FAHRENHEIT">Fahrenheit</option>
+            <option value="CELSIUS">Celsius</option>
+            <option value="KELVIN">Kelvin</option>
+          </select>
+        </div>
+      </section>
+
+      <div class="action">
+        <button id="convertBtn">Convert</button>
+        <div class="note">Endpoint must include https:// and will call /v1/convert</div>
+      </div>
+
+      <div class="result" id="result">Ready to convert.</div>
+    </main>
+
+    <script>
+      const endpointInput = document.getElementById("endpoint");
+      const valueInput = document.getElementById("value");
+      const fromUnitInput = document.getElementById("fromUnit");
+      const toUnitInput = document.getElementById("toUnit");
+      const resultBox = document.getElementById("result");
+      const convertBtn = document.getElementById("convertBtn");
+
+      const setResult = (text, isError = false) => {
+        resultBox.textContent = text;
+        resultBox.style.background = isError ? "#ffe8e8" : "#f4f7fb";
+      };
+
+      const convert = async () => {
+        const endpoint = endpointInput.value.trim().replace(/\/$/, "");
+        const payload = {
+          value: Number(valueInput.value || 0),
+          fromUnit: fromUnitInput.value,
+          toUnit: toUnitInput.value,
+        };
+
+        setResult("Converting...");
+
+        try {
+          const response = await fetch(`${endpoint}/v1/convert`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          });
+
+          if (!response.ok) {
+            const text = await response.text();
+            throw new Error(text || `HTTP ${response.status}`);
+          }
+
+          const data = await response.json();
+          setResult(`Converted value: ${data.convertedValue} | ${data.formulaUsed}`);
+        } catch (error) {
+          setResult(`Error: ${error.message}`, true);
+        }
+      };
+
+      convertBtn.addEventListener("click", convert);
+    </script>
+  </body>
+</html>
