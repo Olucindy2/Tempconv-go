@@ -12,8 +12,11 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o tempconv-server ./cmd/serv
 FROM gcr.io/distroless/static-debian12
 
 WORKDIR /
+
 COPY --from=builder /app/tempconv-server /tempconv-server
 
-EXPOSE 50051
+# Cloud Run uses PORT=8080
+ENV PORT=8080
+EXPOSE 8080
 
 CMD ["/tempconv-server"]
