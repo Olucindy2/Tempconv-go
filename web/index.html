@@ -248,7 +248,7 @@
           }
 
           const data = await response.json();
-          setResult(`Converted value: ${data.convertedValue}`);
+          setResult(`${data.convertedValue}`);
         } catch (error) {
           setResult(`Error: ${error.message}`, true);
         }

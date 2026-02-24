@@ -63,6 +63,5 @@ func main() {
 		log.Fatalf("RPC failed: %v", err)
 	}
 
-	fmt.Printf("Converted value: %.4f\n", response.GetConvertedValue())
-	fmt.Printf("Formula: %s\n", response.GetFormulaUsed())
+	fmt.Printf("%.4f\n", response.GetConvertedValue())
 }
